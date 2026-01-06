@@ -16,7 +16,12 @@ DBS=`ls -1 /var/ossec/queue/db/*.db | grep -v global`
 for AGENT_DB in $DBS; do
         echo "Clearing Security Configuration Assessment state from Wazuh agent db $AGENT_DB..."
         cp $AGENT_DB /var/ossec/queue/db-backup/
-        sqlite3 $AGENT_DB 'delete from sca_check;'
+        sqlite3 $AGENT_DB 'DELETE FROM sca_check;'
+        sqlite3 $AGENT_DB 'DELETE FROM sca_check_compliance';
+        sqlite3 $AGENT_DB 'DELETE FROM sca_check_rules';
+        sqlite3 $AGENT_DB 'DELETE FROM sca_policy';
+        sqlite3 $AGENT_DB 'DELETE FROM sca_scan_info';
+
 done
 echo "Starting Wazuh Manager..."
 systemctl start wazuh-manager
